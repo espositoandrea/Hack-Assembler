@@ -6,7 +6,7 @@ This project has been created as part of an exam.
   <dt>Academic year</dt>
   <dd>2017/2018</dd>
   <dt>Year and semester</dt>
-  <dd>1st year, 1st semester</dd>
+  <dd>First year, first semester</dd>
   <dt>Exam</dt>
   <dd>Computer Architecture and Operative Systems</dd>
 </dl>
