@@ -55,13 +55,9 @@ void Assembler::firstPass(ifstream& source)
     while(getline(source, line))
     {
         if(line.substr(0,1) == "(" && line.substr(line.size() - 1, 1) == ")")
-        {
            symbolTable.push_back(createSymbol(line.substr(1, line.size() - 2), currentRomLine));
-        }
         else if(line.substr(0, 2) != "//" && !line.empty())
-        {
             currentRomLine++;
-        }
     }
 }
 
@@ -111,9 +107,7 @@ string Assembler::parser(string instruction)
     string result;
 
     if(instruction.find("@") != std::string::npos)      //A Instruction
-    {
-        result = code(instruction.substr(instruction.find("@") + 1, instruction.size() - 1), true, false);
-    }
+        result = A_InsructionTranslate(instruction.substr(instruction.find("@") + 1, instruction.size() - 1));
     else                                                //C Instruction
     {
         result = "111";
@@ -124,17 +118,17 @@ string Assembler::parser(string instruction)
         if(instruction.find(";") != std::string::npos)
             comp_end = instruction.find(";");
 
-        result += code(instruction.substr(comp_start, comp_end), false, true);
+        result += C_InsructionTranslate(instruction.substr(comp_start, comp_end), true);
 
 
         if(instruction.find("=") != std::string::npos)
-            result += code(instruction.substr(0, instruction.find("=") + 1), false, false);
+            result += C_InsructionTranslate(instruction.substr(0, instruction.find("=") + 1), false);
         else
             result += "000";
 
 
         if(instruction.find(";") != std::string::npos)
-            result += code(instruction.substr(instruction.find(";"),4), false, false);
+            result += C_InsructionTranslate(instruction.substr(instruction.find(";"),4), false);
         else
             result += "000";
     }
@@ -142,132 +136,136 @@ string Assembler::parser(string instruction)
     return result;
 }
 
-string Assembler::code(string instruction, bool isAInstruction, bool isComp)
+string Assembler::A_InsructionTranslate(string instruction)
 {
     string result;
-    if(isAInstruction)
+
+    result = "0";
+    if(is_number(instruction))
     {
-        result = "0";
-        if(is_number(instruction))
-        {
-            result += bitset<15>(stoi(instruction, nullptr)).to_string();
-        }
-        else
-        {
-            bool found = false;
-            for(int i = 0; i < symbolTable.size() && !found; i++)
-            {
-                if(instruction == symbolTable[i].name)
-                {
-                    result += bitset<15>(symbolTable[i].line).to_string();
-                    found = true;
-                }
-            }
-            if(!found)
-            {
-                symbolTable.push_back(createSymbol(instruction, currentRamLine));
-                result += bitset<15>(currentRamLine).to_string();
-                currentRamLine++;
-            }
-        }
+        result += bitset<15>(stoi(instruction, nullptr)).to_string();
     }
     else
     {
-        if(instruction.substr(0, 1) == ";")
+        bool found = false;
+        for(int i = 0; i < symbolTable.size() && !found; i++)
         {
-            if(instruction.substr(1, 3) == "JGT")
-                result = "001";
-            else if(instruction.substr(1, 3) == "JEQ")
-                result = "010";
-            else if(instruction.substr(1, 3) == "JGE")
-                result = "011";
-            else if(instruction.substr(1, 3) == "JLT")
-                result = "100";
-            else if(instruction.substr(1, 3) == "JNE")
-                result = "101";
-            else if(instruction.substr(1, 3) == "JLE")
-                result = "110";
-            else if(instruction.substr(1, 3) == "JMP")
-                result = "111";
+            if(instruction == symbolTable[i].name)
+            {
+                result += bitset<15>(symbolTable[i].line).to_string();
+                found = true;
+            }
         }
-
-        else if(instruction.substr(instruction.size() - 1, 1) == "=")
+        if(!found)
         {
-            if(instruction.substr(0, instruction.size() - 1) == "M")
-                result = "001";
-            else if(instruction.substr(0, instruction.size() - 1) == "D")
-                result = "010";
-            else if(instruction.substr(0, instruction.size() - 1) == "MD")
-                result = "011";
-            else if(instruction.substr(0, instruction.size() - 1) == "A")
-                result = "100";
-            else if(instruction.substr(0, instruction.size() - 1) == "AM")
-                result = "101";
-            else if(instruction.substr(0, instruction.size() - 1) == "AD")
-                result = "110";
-            else if(instruction.substr(0, instruction.size() - 1) == "AMD")
-                result = "111";
-        }
-
-        if(isComp)
-        {
-            if(instruction == "0")
-                result = "0101010";
-            else if(instruction == "1")
-                result = "0111111";
-            else if(instruction == "-1")
-                result = "0111010";
-            else if(instruction == "D")
-                result = "0001100";
-            else if(instruction == "A")
-                result = "0110000";
-            else if(instruction == "!D")
-                result = "0001101";
-            else if(instruction == "!A")
-                result = "0110001";
-            else if(instruction == "-D")
-                result = "0001111";
-            else if(instruction == "-A")
-                result = "0110011";
-            else if(instruction == "D+1")
-                result = "0011111";
-            else if(instruction == "A+1")
-                result = "0110111";
-            else if(instruction == "D-1")
-                result = "0001110";
-            else if(instruction == "A-1")
-                result = "0110010";
-            else if(instruction == "D+A")
-                result = "0000010";
-            else if(instruction == "D-A")
-                result = "0010011";
-            else if(instruction == "A-D")
-                result = "0000111";
-            else if(instruction == "D&A")
-                result = "0000000";
-            else if(instruction == "D|A")
-                result = "0010101";
-            else if(instruction == "M")
-                result = "1110000";
-            else if(instruction == "!M")
-                result = "1110001";
-            else if(instruction == "-M")
-                result = "1110011";
-            else if(instruction == "M+1")
-                result = "1110111";
-            else if(instruction == "M-1")
-                result = "1110010";
-            else if(instruction == "D+M")
-                result = "1000010";
-            else if(instruction == "D-M")
-                result = "1010011";
-            else if(instruction == "M-D")
-                result = "1000111";
-            else if(instruction == "D&M")
-                result = "1000000";
-            else if(instruction == "D|M")
-                result = "1010101";
+            symbolTable.push_back(createSymbol(instruction, currentRamLine));
+            result += bitset<15>(currentRamLine).to_string();
+            currentRamLine++;
         }
     }
+
+    return result;
+}
+
+string Assembler::C_InsructionTranslate(string instruction, bool isComp)
+{
+    string result;
+
+    if(instruction.substr(0, 1) == ";")
+    {
+        if(instruction.substr(1, 3) == "JGT")
+            result = "001";
+        else if(instruction.substr(1, 3) == "JEQ")
+            result = "010";
+        else if(instruction.substr(1, 3) == "JGE")
+            result = "011";
+        else if(instruction.substr(1, 3) == "JLT")
+            result = "100";
+        else if(instruction.substr(1, 3) == "JNE")
+            result = "101";
+        else if(instruction.substr(1, 3) == "JLE")
+            result = "110";
+        else if(instruction.substr(1, 3) == "JMP")
+            result = "111";
+    }
+
+    else if(instruction.substr(instruction.size() - 1, 1) == "=")
+    {
+        if(instruction.substr(0, instruction.size() - 1) == "M")
+            result = "001";
+        else if(instruction.substr(0, instruction.size() - 1) == "D")
+            result = "010";
+        else if(instruction.substr(0, instruction.size() - 1) == "MD")
+            result = "011";
+        else if(instruction.substr(0, instruction.size() - 1) == "A")
+            result = "100";
+        else if(instruction.substr(0, instruction.size() - 1) == "AM")
+            result = "101";
+        else if(instruction.substr(0, instruction.size() - 1) == "AD")
+            result = "110";
+        else if(instruction.substr(0, instruction.size() - 1) == "AMD")
+            result = "111";
+    }
+
+    if(isComp)
+    {
+        if(instruction == "0")
+            result = "0101010";
+        else if(instruction == "1")
+            result = "0111111";
+        else if(instruction == "-1")
+            result = "0111010";
+        else if(instruction == "D")
+            result = "0001100";
+        else if(instruction == "A")
+            result = "0110000";
+        else if(instruction == "!D")
+            result = "0001101";
+        else if(instruction == "!A")
+            result = "0110001";
+        else if(instruction == "-D")
+            result = "0001111";
+        else if(instruction == "-A")
+            result = "0110011";
+        else if(instruction == "D+1")
+            result = "0011111";
+        else if(instruction == "A+1")
+            result = "0110111";
+        else if(instruction == "D-1")
+            result = "0001110";
+        else if(instruction == "A-1")
+            result = "0110010";
+        else if(instruction == "D+A")
+            result = "0000010";
+        else if(instruction == "D-A")
+            result = "0010011";
+        else if(instruction == "A-D")
+            result = "0000111";
+        else if(instruction == "D&A")
+            result = "0000000";
+        else if(instruction == "D|A")
+            result = "0010101";
+        else if(instruction == "M")
+            result = "1110000";
+        else if(instruction == "!M")
+            result = "1110001";
+        else if(instruction == "-M")
+            result = "1110011";
+        else if(instruction == "M+1")
+            result = "1110111";
+        else if(instruction == "M-1")
+            result = "1110010";
+        else if(instruction == "D+M")
+            result = "1000010";
+        else if(instruction == "D-M")
+            result = "1010011";
+        else if(instruction == "M-D")
+            result = "1000111";
+        else if(instruction == "D&M")
+            result = "1000000";
+        else if(instruction == "D|M")
+            result = "1010101";
+    }
+
     return result;
 }
