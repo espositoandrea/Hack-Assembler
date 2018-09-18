@@ -1,4 +1,4 @@
-# Hack-Assembler
+# Hack Assembler
 This project has been created as part of an exam.
 <dl>
   <dt>University</dt>
