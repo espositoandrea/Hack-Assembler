@@ -77,7 +77,7 @@ void MainWindow::on_Translate_btn_clicked()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox msg;
-    msg.setText("<b style='font-size: 12pt;'>&#169; GAMEMAX Entertainment, 2017</b>");
+    msg.setText("<b style='font-size: 12pt;'>&#169; Andrea Esposito, 2017</b>");
     msg.setInformativeText("This Assembler was developed by:"
                            "<ul>"
                            "<li>&#160; Andrea Esposito - UniBa, ICD Taranto (I year)</li>"
