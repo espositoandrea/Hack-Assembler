@@ -37,6 +37,7 @@ FORMS += \
 
 DISTFILES += \
     HackAssembler.rc \
-    HackAssemblerIcon.ico
+    HackAssemblerIcon.ico \
+    HackAssemblerIcon.png
 
 RC_FILE = HackAssembler.rc
