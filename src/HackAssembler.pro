@@ -26,18 +26,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    assembler.cpp
+    Assembler/Assembler.cpp
 
 HEADERS += \
         mainwindow.h \
-    assembler.h
+    Assembler/Assembler.h
 
 FORMS += \
         mainwindow.ui
 
 DISTFILES += \
-    HackAssembler.rc \
-    HackAssemblerIcon.ico \
-    HackAssemblerIcon.png
+    Resources/HackAssembler.rc \
+    Resources/HackAssemblerIcon.ico \
+    Resources/HackAssemblerIcon.png
 
-RC_FILE = HackAssembler.rc
+RC_FILE = Resources/HackAssembler.rc
