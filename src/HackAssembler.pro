@@ -25,7 +25,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    assembler.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -33,3 +34,9 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    HackAssembler.rc \
+    HackAssemblerIcon.ico
+
+RC_FILE = HackAssembler.rc
