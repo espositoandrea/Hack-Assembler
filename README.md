@@ -1,6 +1,9 @@
 # Hack Assembler
 
-[![GitHub license](https://img.shields.io/github/license/mineand99/Hack-Assembler.svg?style=for-the-badge)](https://github.com/mineand99/Hack-Assembler/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/espositoandrea/Hack-Assembler.svg?style=for-the-badge)](https://github.com/mineand99/Hack-Assembler/blob/master/LICENSE)
+![Version](https://img.shields.io/github/release/espositoandrea/Hack-Assembler.svg?style=for-the-badge)
+
+
 
 This project has been created as part of an exam.
 <dl>
