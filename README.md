@@ -1,7 +1,7 @@
 # Hack Assembler
 
 [![GitHub license](https://img.shields.io/github/license/espositoandrea/Hack-Assembler.svg?style=for-the-badge)](https://github.com/mineand99/Hack-Assembler/blob/master/LICENSE)
-![Version](https://img.shields.io/github/release/espositoandrea/Hack-Assembler.svg?style=for-the-badge)
+[![Version](https://img.shields.io/github/release/espositoandrea/Hack-Assembler.svg?style=for-the-badge)](https://github.com/espositoandrea/Hack-Assembler/releases/latest)
 ![Last Commit Date](https://img.shields.io/github/last-commit/espositoandrea/Hack-Assembler.svg?style=for-the-badge)
 ![Software not mainteined](https://img.shields.io/maintenance/no/2018.svg?style=for-the-badge)
 
